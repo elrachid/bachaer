@@ -1,0 +1,25 @@
+uuid: 14fd5802-5dd6-4580-abd9-dcff46d902e3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_teacher
+    - node.type.group
+id: node.group.field_teacher
+field_name: field_teacher
+entity_type: node
+bundle: group
+label: Teacher
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: teachers
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

@@ -1,0 +1,18 @@
+uuid: cce9f405-8e76-418c-a4ee-a20b5fc9108e
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: Group
+type: group
+description: 'Manage groups within a semester, such as adult reciters and children reciters.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: true

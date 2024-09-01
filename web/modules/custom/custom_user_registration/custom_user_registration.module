@@ -1,0 +1,15 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function custom_user_registration_form_user_register_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Remove the password field requirement.
+  $form['account']['pass']['#required'] = FALSE;
+
+  // Optionally, you can hide the password field completely.
+  // Uncomment the next line to hide the password field.
+   $form['account']['pass']['#access'] = FALSE;
+}

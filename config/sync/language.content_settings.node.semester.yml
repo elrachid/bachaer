@@ -1,0 +1,11 @@
+uuid: 6965fbc7-73b1-4d0f-bde1-bc15af4d3ce4
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.semester
+id: node.semester
+target_entity_type_id: node
+target_bundle: semester
+default_langcode: site_default
+language_alterable: false
