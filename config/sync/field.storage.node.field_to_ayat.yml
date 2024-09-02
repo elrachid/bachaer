@@ -1,0 +1,24 @@
+uuid: 8d8a4d8d-e147-4d25-b857-8ae22dae9294
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_to_ayat
+field_name: field_to_ayat
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: bbbb
+      label: bbbb
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

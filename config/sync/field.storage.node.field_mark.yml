@@ -1,0 +1,20 @@
+uuid: f4664b5b-576c-4267-89ac-1d0738a785ab
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_mark
+field_name: field_mark
+entity_type: node
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,11 @@
+uuid: 95f9413d-ecc7-421b-a930-51c455014b5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.marks
+id: node.marks
+target_entity_type_id: node
+target_bundle: marks
+default_langcode: site_default
+language_alterable: false

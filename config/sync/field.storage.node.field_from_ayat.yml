@@ -1,0 +1,24 @@
+uuid: afb01c27-4281-49c6-b62f-619f5294bd28
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_from_ayat
+field_name: field_from_ayat
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: aaa
+      label: aaa
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

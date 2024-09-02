@@ -1,0 +1,41 @@
+uuid: 232aab41-27d0-4b97-828c-6b8c9d020994
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.marks.body
+    - field.field.node.marks.field_from_ayat
+    - field.field.node.marks.field_mark
+    - field.field.node.marks.field_note
+    - field.field.node.marks.field_student_mark
+    - field.field.node.marks.field_to_ayat
+    - node.type.marks
+  module:
+    - text
+    - user
+id: node.marks.teaser
+targetEntityType: node
+bundle: marks
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_from_ayat: true
+  field_mark: true
+  field_note: true
+  field_student_mark: true
+  field_to_ayat: true
+  langcode: true

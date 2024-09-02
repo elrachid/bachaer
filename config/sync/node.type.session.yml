@@ -1,0 +1,18 @@
+uuid: 52987069-2b37-4287-89c3-aaf9895ffbb8
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: Session
+type: session
+description: 'A teacher create Session for his group every time to mark the absense and give marks to student.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: true

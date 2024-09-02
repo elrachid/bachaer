@@ -1,0 +1,21 @@
+uuid: a41f1a8f-dfb0-4979-a6fd-1ebd6dbf6311
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_to_ayat
+    - node.type.marks
+  module:
+    - options
+id: node.marks.field_to_ayat
+field_name: field_to_ayat
+entity_type: node
+bundle: marks
+label: 'To ayat'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
