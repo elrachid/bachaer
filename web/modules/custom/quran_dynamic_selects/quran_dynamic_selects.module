@@ -1,0 +1,155 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use GuzzleHttp\Exception\RequestException;
+
+/**
+ * Implements hook_form_alter().
+ */
+function quran_dynamic_selects_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'node_marks_form') {
+
+    // Add AJAX callback to the Juzaa select field.
+    $form['field_juzaa_wrapper'] = [
+      "#type" => "container",
+      "#parents" => [
+        "field_juzaa_wrapper",
+      ],
+      "#attributes" => [
+        "class" => [
+          "field--type-list-integer",
+          "field--name-field-juzaa",
+          "field--widget-options-select",
+        ],
+      ],
+      "widget" => [
+        "#title" => "Juzaa",
+        "#description" => "",
+        "#field_parents" => [],
+        "#required" => false,
+        "#delta" => 0,
+        "#weight" => 0,
+        "#element_validate" => [
+          // You may already have validation here.
+        ],
+        "#key_column" => "value",
+        "#type" => "select",
+        "#options" => fetch_juzaa_numbers(),
+        "#default_value" => [],
+        "#multiple" => false,
+        "#after_build" => [
+          // Any existing after build callbacks.
+        ],
+        "#field_name" => "field_juzaa",
+        "#parents" => [
+          "field_juzaa_wrapper",
+        ],
+        "#tree" => true,
+
+        // Add the AJAX callback here
+        "#ajax" => [
+          'callback' => '_quran_dynamic_selects_ajax_callback', // Replace with your callback function name
+          'wrapper' => 'ayat-select-wrapper', // The ID of the wrapper div where the response will be rendered
+          'event' => 'change', // The event that triggers the AJAX call
+        ],
+      ],
+      "#access" => true,
+      "#weight" => 125,
+      "#cache" => [
+        "contexts" => [
+          // Your cache contexts.
+        ],
+        "tags" => [
+          // Your cache tags.
+        ],
+        "max-age" => -1,
+      ],
+    ];
+
+
+    //dump($form['field_juzaa']);
+    //die($form_id);
+
+    // Add wrappers to the Ayat select fields.
+    $form['field_from_ayat']['#prefix'] = '<div id="ayat-select-wrapper">';
+    $form['field_from_ayat']['#suffix'] = '</div>';
+    $form['field_to_ayat']['#prefix'] = '<div id="ayat-select-to-wrapper">';
+    $form['field_to_ayat']['#suffix'] = '</div>';
+
+  }
+}
+
+function _quran_dynamic_selects_ajax_callback(array &$form, FormStateInterface $form_state) {
+  $response = new \Drupal\Core\Ajax\AjaxResponse();
+
+  // Get the selected Juz' number.
+  $selected_juz = $form_state->getValue('field_juzaa_wrapper');
+  \Drupal::logger('quran_dynamic_selects')->info('Selected Juz: @juz', ['@juz' => $selected_juz]);
+
+  // Fetch Ayat for the selected Juz'.
+  $ayat_options = fetch_ayat_by_juz($selected_juz);
+
+
+
+  // Update the Ayat select fields with the new options.
+
+  $form['field_from_ayat']['widget']['#options'] = $ayat_options;
+  $form['field_to_ayat']['widget']['#options'] = $ayat_options;
+  //dump($form['field_from_ayat']['#options']);
+  //die('GJ');
+
+  // Rebuild the select fields within the wrapper and return them.
+  $response->addCommand(new \Drupal\Core\Ajax\ReplaceCommand('#ayat-select-wrapper', $form['field_from_ayat']));
+  $response->addCommand(new \Drupal\Core\Ajax\ReplaceCommand('#ayat-select-to-wrapper', $form['field_to_ayat']));
+
+  return $response;
+}
+
+
+function fetch_juzaa_numbers() {
+  $juzaa_numbers = [];
+
+  try {
+    $client = \Drupal::httpClient();
+    $response = $client->get('https://api.quran.com/api/v4/juzs');
+    $data = json_decode($response->getBody(), TRUE);
+
+    if (!empty($data['juzs'])) {
+      foreach ($data['juzs'] as $juz) {
+        $juzaa_numbers[$juz['juz_number']] = 'Juz ' . $juz['juz_number'];
+      }
+    }
+  } catch (RequestException $e) {
+    \Drupal::logger('quran_dynamic_selects')->error('Failed to fetch Juz numbers: @message', ['@message' => $e->getMessage()]);
+  }
+
+  return $juzaa_numbers;
+}
+
+function fetch_ayat_by_juz($juz_number) {
+  $ayat = [];
+
+  try {
+    // Use the Guzzle HTTP client to make the request.
+    $client = \Drupal::httpClient();
+    $response = $client->get('https://api.quran.com/api/v4/juzs/' . $juz_number);
+    $data = json_decode($response->getBody(), TRUE);
+
+    if (!empty($data['juz']['verse_mapping'])) {
+      foreach ($data['juz']['verse_mapping'] as $surah_id => $verses) {
+        list($start_ayah, $end_ayah) = explode('-', $verses);
+        for ($ayah = $start_ayah; $ayah <= $end_ayah; $ayah++) {
+          $ayat[$ayah] = 'Ayah ' . $ayah;
+        }
+      }
+    }
+  }
+  catch (RequestException $e) {
+    \Drupal::logger('quran_dynamic_selects')->error('Failed to fetch Ayat: @message', ['@message' => $e->getMessage()]);
+  }
+
+  return $ayat;
+}
+
+
